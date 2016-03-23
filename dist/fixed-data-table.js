@@ -333,6 +333,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    overflowY: PropTypes.oneOf(['hidden', 'auto']),
 
 	    /**
+	     * Hide the scrollbar but still enable scroll functionality
+	     */
+	    showScrollbarX: PropTypes.bool,
+	    showScrollbarY: PropTypes.bool,
+
+	    /**
+	     * Callback when horizontally scrolling the grid
+	     *
+	     * Return false to stop propagation
+	     */
+	    onHorizontalScroll: PropTypes.func,
+
+	    /**
 	     * Number of rows in the table.
 	     */
 	    rowsCount: PropTypes.number.isRequired,
@@ -460,8 +473,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      footerHeight: 0,
 	      groupHeaderHeight: 0,
 	      headerHeight: 0,
-	      scrollLeft: 0,
-	      scrollTop: 0
+	      showScrollbarX: true,
+	      showScrollbarY: true
 	    };
 	  },
 
@@ -592,8 +605,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var maxScrollY = this.state.maxScrollY;
-	    var showScrollbarX = state.maxScrollX > 0 && state.overflowX !== 'hidden';
-	    var showScrollbarY = maxScrollY > 0 && state.overflowY !== 'hidden';
+	    var showScrollbarX = state.maxScrollX > 0 && state.overflowX !== 'hidden' && state.showScrollbarX !== false;
+	    var showScrollbarY = maxScrollY > 0 && state.overflowY !== 'hidden' && state.showScrollbarY !== false;
 	    var scrollbarXHeight = showScrollbarX ? Scrollbar.SIZE : 0;
 	    var scrollbarYHeight = state.height - scrollbarXHeight - 2 * BORDER_HEIGHT - state.footerHeight;
 
@@ -859,14 +872,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var firstRowIndex = oldState && oldState.firstRowIndex || 0;
 	    var firstRowOffset = oldState && oldState.firstRowOffset || 0;
 	    var scrollX, scrollY;
-	    if (oldState && props.overflowX !== 'hidden') {
-	      scrollX = oldState.scrollX;
-	    } else {
+
+	    scrollX = oldState ? oldState.scrollX : 0;
+	    if (props.scrollLeft !== this.props.scrollLeft) {
 	      scrollX = props.scrollLeft;
 	    }
-	    if (oldState && props.overflowY !== 'hidden') {
-	      scrollY = oldState.scrollY;
-	    } else {
+
+	    scrollY = oldState ? oldState.scrollY : 0;
+	    if (props.scrollTop !== this.props.scrollTop) {
 	      scrollState = this._scrollHelper.scrollTo(props.scrollTop);
 	      firstRowIndex = scrollState.index;
 	      firstRowOffset = scrollState.offset;
@@ -958,7 +971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var totalHeightNeeded = scrollContentHeight + totalHeightReserved;
 	    var scrollContentWidth = FixedDataTableWidthHelper.getTotalWidth(columns);
 
-	    var horizontalScrollbarVisible = scrollContentWidth > props.width && props.overflowX !== 'hidden';
+	    var horizontalScrollbarVisible = scrollContentWidth > props.width && props.overflowX !== 'hidden' && props.showScrollbarX !== false;
 
 	    if (horizontalScrollbarVisible) {
 	      bodyHeight -= Scrollbar.SIZE;
@@ -1059,9 +1072,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        x += deltaX;
 	        x = x < 0 ? 0 : x;
 	        x = x > this.state.maxScrollX ? this.state.maxScrollX : x;
-	        this.setState({
-	          scrollX: x
-	        });
+
+	        //NOTE (asif) This is a hacky workaround to prevent FDT from setting its internal state
+	        var onHorizontalScroll = this.props.onHorizontalScroll;
+	        if (onHorizontalScroll ? onHorizontalScroll(x) : true) {
+	          this.setState({
+	            scrollX: x
+	          });
+	        }
 	      }
 
 	      this._didScrollStop();
@@ -1073,9 +1091,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!this._isScrolling) {
 	        this._didScrollStart();
 	      }
-	      this.setState({
-	        scrollX: scrollPos
-	      });
+	      var onHorizontalScroll = this.props.onHorizontalScroll;
+	      if (onHorizontalScroll ? onHorizontalScroll(scrollPos) : true) {
+	        this.setState({
+	          scrollX: scrollPos
+	        });
+	      }
 	      this._didScrollStop();
 	    }
 	  },
