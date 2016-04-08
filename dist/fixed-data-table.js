@@ -871,7 +871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var firstRowIndex = oldState && oldState.firstRowIndex || 0;
 	    var firstRowOffset = oldState && oldState.firstRowOffset || 0;
-	    var scrollX, scrollY;
+	    var scrollX, scrollY, scrollState;
 
 	    scrollX = oldState ? oldState.scrollX : 0;
 	    if (props.scrollLeft !== this.props.scrollLeft) {
@@ -885,6 +885,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      firstRowOffset = scrollState.offset;
 	      scrollY = scrollState.position;
 	    }
+	    var groupHeaderHeight = useGroupHeader ? props.groupHeaderHeight : 0;
+
+	    if (oldState && (props.rowsCount !== oldState.rowsCount || props.rowHeight !== oldState.rowHeight)) {
+	      // Number of rows changed, try to scroll to the row from before the
+	      // change
+	      var viewportHeight = (props.height === undefined ? props.maxHeight : props.height) - (props.headerHeight || 0) - (props.footerHeight || 0) - (props.groupHeaderHeight || 0);
+	      this._scrollHelper = new FixedDataTableScrollHelper(props.rowsCount, props.rowHeight, viewportHeight, props.rowHeightGetter);
+	      scrollState = this._scrollHelper.scrollToRow(firstRowIndex, firstRowOffset);
+	      firstRowIndex = scrollState.index;
+	      firstRowOffset = scrollState.offset;
+	      scrollY = scrollState.position;
+	    } else if (oldState && props.rowHeightGetter !== oldState.rowHeightGetter) {
+	      this._scrollHelper.setRowHeightGetter(props.rowHeightGetter);
+	    }
 
 	    if (this._rowToScrollTo !== undefined) {
 	      scrollState = this._scrollHelper.scrollRowIntoView(this._rowToScrollTo);
@@ -892,21 +906,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      firstRowOffset = scrollState.offset;
 	      scrollY = scrollState.position;
 	      delete this._rowToScrollTo;
-	    }
-
-	    var groupHeaderHeight = useGroupHeader ? props.groupHeaderHeight : 0;
-
-	    if (oldState && props.rowsCount !== oldState.rowsCount) {
-	      // Number of rows changed, try to scroll to the row from before the
-	      // change
-	      var viewportHeight = (props.height === undefined ? props.maxHeight : props.height) - (props.headerHeight || 0) - (props.footerHeight || 0) - (props.groupHeaderHeight || 0);
-	      this._scrollHelper = new FixedDataTableScrollHelper(props.rowsCount, props.rowHeight, viewportHeight, props.rowHeightGetter);
-	      var scrollState = this._scrollHelper.scrollToRow(firstRowIndex, firstRowOffset);
-	      firstRowIndex = scrollState.index;
-	      firstRowOffset = scrollState.offset;
-	      scrollY = scrollState.position;
-	    } else if (oldState && props.rowHeightGetter !== oldState.rowHeightGetter) {
-	      this._scrollHelper.setRowHeightGetter(props.rowHeightGetter);
 	    }
 
 	    var columnResizingData;
