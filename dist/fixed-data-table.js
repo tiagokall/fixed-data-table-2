@@ -18,7 +18,7 @@
 		exports["FixedDataTable"] = factory(require("react"), require("react-dom"));
 	else
 		root["FixedDataTable"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_28__, __WEBPACK_EXTERNAL_MODULE_44__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_30__, __WEBPACK_EXTERNAL_MODULE_46__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -76,7 +76,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(19);
 	__webpack_require__(21);
 	__webpack_require__(23);
-	module.exports = __webpack_require__(25);
+	__webpack_require__(25);
+	module.exports = __webpack_require__(27);
 
 
 /***/ },
@@ -160,6 +161,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ },
 /* 24 */,
 /* 25 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 26 */,
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -175,10 +183,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var FixedDataTable = __webpack_require__(26);
-	var FixedDataTableCellDefault = __webpack_require__(64);
-	var FixedDataTableColumn = __webpack_require__(62);
-	var FixedDataTableColumnGroup = __webpack_require__(61);
+	var FixedDataTable = __webpack_require__(28);
+	var FixedDataTableCellDefault = __webpack_require__(66);
+	var FixedDataTableColumn = __webpack_require__(64);
+	var FixedDataTableColumnGroup = __webpack_require__(63);
 
 	var FixedDataTableRoot = {
 	  Cell: FixedDataTableCellDefault,
@@ -191,7 +199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableRoot;
 
 /***/ },
-/* 26 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -213,23 +221,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var React = __webpack_require__(27);
-	var ReactComponentWithPureRenderMixin = __webpack_require__(29);
-	var ReactWheelHandler = __webpack_require__(30);
-	var Scrollbar = __webpack_require__(38);
-	var FixedDataTableBufferedRows = __webpack_require__(52);
-	var FixedDataTableColumnResizeHandle = __webpack_require__(66);
-	var FixedDataTableRow = __webpack_require__(57);
-	var FixedDataTableScrollHelper = __webpack_require__(67);
-	var FixedDataTableWidthHelper = __webpack_require__(69);
+	var React = __webpack_require__(29);
+	var ReactComponentWithPureRenderMixin = __webpack_require__(31);
+	var ReactWheelHandler = __webpack_require__(32);
+	var Scrollbar = __webpack_require__(40);
+	var FixedDataTableBufferedRows = __webpack_require__(54);
+	var FixedDataTableColumnResizeHandle = __webpack_require__(69);
+	var FixedDataTableRow = __webpack_require__(59);
+	var FixedDataTableScrollHelper = __webpack_require__(70);
+	var FixedDataTableWidthHelper = __webpack_require__(72);
 
-	var cx = __webpack_require__(46);
-	var debounceCore = __webpack_require__(70);
-	var emptyFunction = __webpack_require__(31);
-	var invariant = __webpack_require__(51);
-	var joinClasses = __webpack_require__(65);
-	var shallowEqual = __webpack_require__(71);
-	var translateDOMPositionXY = __webpack_require__(47);
+	var cx = __webpack_require__(48);
+	var debounceCore = __webpack_require__(73);
+	var emptyFunction = __webpack_require__(33);
+	var invariant = __webpack_require__(53);
+	var joinClasses = __webpack_require__(67);
+	var shallowEqual = __webpack_require__(74);
+	var translateDOMPositionXY = __webpack_require__(49);
 
 	var PropTypes = React.PropTypes;
 
@@ -463,9 +471,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onColumnResizeEndCallback: PropTypes.func,
 
 	    /**
+	     * Callback that is called when reordering has been completed
+	     * and columns need to be updated.
+	     *
+	     * ```
+	     * function(
+	     *   event {
+	     *     columnBefore: string|undefined, // the column before the new location of this one
+	     *     columnAfter: string|undefined,  // the column after the new location of this one
+	     *     reorderColumn: string,          // the column key that was just reordered
+	     *   }
+	     * )
+	     * ```
+	     */
+	    onColumnReorderEndCallback: PropTypes.func,
+
+	    /**
 	     * Whether a column is currently being resized.
 	     */
-	    isColumnResizing: PropTypes.bool
+	    isColumnResizing: PropTypes.bool,
+
+	    /**
+	     * Whether columns are currently being reordered.
+	     */
+	    isColumnReordering: PropTypes.bool
 	  },
 
 	  getDefaultProps: function getDefaultProps() /*object*/{
@@ -586,6 +615,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var state = this.state;
 	    var props = this.props;
 
+	    var onColumnReorder = props.onColumnReorderEndCallback ? this._onColumnReorder : null;
+
 	    var groupHeader;
 	    if (state.useGroupHeader) {
 	      groupHeader = React.createElement(FixedDataTableRow, {
@@ -600,7 +631,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        scrollLeft: state.scrollX,
 	        fixedColumns: state.groupHeaderFixedColumns,
 	        scrollableColumns: state.groupHeaderScrollableColumns,
-	        onColumnResize: this._onColumnResize
+	        onColumnResize: this._onColumnResize,
+	        onColumnReorder: onColumnReorder,
+	        onColumnReorderMove: this._onColumnReorderMove
 	      });
 	    }
 
@@ -692,7 +725,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      scrollLeft: state.scrollX,
 	      fixedColumns: state.headFixedColumns,
 	      scrollableColumns: state.headScrollableColumns,
-	      onColumnResize: this._onColumnResize
+	      onColumnResize: this._onColumnResize,
+	      onColumnReorder: onColumnReorder,
+	      onColumnReorderMove: this._onColumnReorderMove,
+	      onColumnReorderEnd: this._onColumnReorderEnd,
+	      isColumnReordering: !!state.isColumnReordering,
+	      columnReorderingData: state.columnReorderingData
 	    });
 
 	    var topShadow;
@@ -790,6 +828,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        key: columnKey
 	      }
+	    });
+	  },
+
+	  _onColumnReorder: function _onColumnReorder(
+	  /*string*/columnKey,
+	  /*number*/width,
+	  /*number*/left,
+	  /*object*/event) {
+	    this.setState({
+	      isColumnReordering: true,
+	      columnReorderingData: {
+	        dragDistance: 0,
+	        columnKey: columnKey,
+	        columnWidth: width,
+	        originalLeft: left,
+	        columnsBefore: [],
+	        columnsAfter: []
+	      }
+	    });
+	  },
+
+	  _onColumnReorderMove: function _onColumnReorderMove(
+	  /*number*/deltaX) {
+	    var reorderingData = this.state.columnReorderingData;
+	    reorderingData.dragDistance = deltaX;
+	    reorderingData.columnBefore = undefined;
+	    reorderingData.columnAfter = undefined;
+
+	    this.setState({
+	      columnReorderingData: reorderingData
+	    });
+	  },
+
+	  _onColumnReorderEnd: function _onColumnReorderEnd(
+	  /*object*/props,
+	  /*object*/event) {
+
+	    var columnBefore = this.state.columnReorderingData.columnBefore;
+	    var columnAfter = this.state.columnReorderingData.columnAfter;
+	    var reorderColumn = this.state.columnReorderingData.columnKey;
+
+	    this.setState({
+	      isReordering: false,
+	      columnReorderingData: {}
+	    });
+	    this.props.onColumnReorderEndCallback({
+	      columnBefore: columnBefore, columnAfter: columnAfter, reorderColumn: reorderColumn
 	    });
 	  },
 
@@ -1184,7 +1269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// avaialble
 
 /***/ },
-/* 27 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1200,16 +1285,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = __webpack_require__(28);
+	module.exports = __webpack_require__(30);
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_28__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_30__;
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports) {
 
 	/**
@@ -1285,7 +1370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1309,9 +1394,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var emptyFunction = __webpack_require__(31);
-	var normalizeWheel = __webpack_require__(32);
-	var requestAnimationFramePolyfill = __webpack_require__(36);
+	var emptyFunction = __webpack_require__(33);
+	var normalizeWheel = __webpack_require__(34);
+	var requestAnimationFramePolyfill = __webpack_require__(38);
 
 	var ReactWheelHandler = (function () {
 	  /**
@@ -1395,7 +1480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ReactWheelHandler;
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports) {
 
 	/**
@@ -1438,7 +1523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = emptyFunction;
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1455,9 +1540,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var UserAgent_DEPRECATED = __webpack_require__(33);
+	var UserAgent_DEPRECATED = __webpack_require__(35);
 
-	var isEventSupported = __webpack_require__(34);
+	var isEventSupported = __webpack_require__(36);
 
 	// Reasonable defaults
 	var PIXEL_STEP = 10;
@@ -1639,7 +1724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = normalizeWheel;
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports) {
 
 	/**
@@ -1922,7 +2007,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = UserAgent_DEPRECATED;
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1938,7 +2023,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var ExecutionEnvironment = __webpack_require__(35);
+	var ExecutionEnvironment = __webpack_require__(37);
 
 	var useHasFeature;
 	if (ExecutionEnvironment.canUseDOM) {
@@ -1987,7 +2072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isEventSupported;
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports) {
 
 	/**
@@ -2030,7 +2115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ExecutionEnvironment;
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -2046,8 +2131,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var emptyFunction = __webpack_require__(31);
-	var nativeRequestAnimationFrame = __webpack_require__(37);
+	var emptyFunction = __webpack_require__(33);
+	var nativeRequestAnimationFrame = __webpack_require__(39);
 
 	var lastTime = 0;
 
@@ -2071,7 +2156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -2093,7 +2178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2110,17 +2195,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var DOMMouseMoveTracker = __webpack_require__(39);
-	var Keys = __webpack_require__(42);
-	var React = __webpack_require__(27);
-	var ReactDOM = __webpack_require__(43);
-	var ReactComponentWithPureRenderMixin = __webpack_require__(29);
-	var ReactWheelHandler = __webpack_require__(30);
+	var DOMMouseMoveTracker = __webpack_require__(41);
+	var Keys = __webpack_require__(44);
+	var React = __webpack_require__(29);
+	var ReactDOM = __webpack_require__(45);
+	var ReactComponentWithPureRenderMixin = __webpack_require__(31);
+	var ReactWheelHandler = __webpack_require__(32);
 
-	var cssVar = __webpack_require__(45);
-	var cx = __webpack_require__(46);
-	var emptyFunction = __webpack_require__(31);
-	var translateDOMPositionXY = __webpack_require__(47);
+	var cssVar = __webpack_require__(47);
+	var cx = __webpack_require__(48);
+	var emptyFunction = __webpack_require__(33);
+	var translateDOMPositionXY = __webpack_require__(49);
 
 	var PropTypes = React.PropTypes;
 
@@ -2545,7 +2630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Scrollbar;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2573,10 +2658,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var EventListener = __webpack_require__(40);
+	var EventListener = __webpack_require__(42);
 
-	var cancelAnimationFramePolyfill = __webpack_require__(41);
-	var requestAnimationFramePolyfill = __webpack_require__(36);
+	var cancelAnimationFramePolyfill = __webpack_require__(43);
+	var requestAnimationFramePolyfill = __webpack_require__(38);
 
 	var DOMMouseMoveTracker = (function () {
 	  /**
@@ -2709,7 +2794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DOMMouseMoveTracker;
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2726,7 +2811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var emptyFunction = __webpack_require__(31);
+	var emptyFunction = __webpack_require__(33);
 
 	/**
 	 * Upstream version of event listener. Does not take into account specific
@@ -2791,7 +2876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventListener;
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -2817,7 +2902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports) {
 
 	/**
@@ -2859,7 +2944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2875,16 +2960,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = __webpack_require__(44);
+	module.exports = __webpack_require__(46);
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_44__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_46__;
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports) {
 
 	/**
@@ -2929,7 +3014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cssVar;
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports) {
 
 	/**
@@ -2988,7 +3073,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cx;
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -3005,9 +3090,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var BrowserSupportCore = __webpack_require__(48);
+	var BrowserSupportCore = __webpack_require__(50);
 
-	var getVendorPrefixedName = __webpack_require__(49);
+	var getVendorPrefixedName = __webpack_require__(51);
 
 	var TRANSFORM = getVendorPrefixedName('transform');
 	var BACKFACE_VISIBILITY = getVendorPrefixedName('backfaceVisibility');
@@ -3042,7 +3127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3058,7 +3143,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var getVendorPrefixedName = __webpack_require__(49);
+	var getVendorPrefixedName = __webpack_require__(51);
 
 	var BrowserSupportCore = {
 	  /**
@@ -3093,7 +3178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = BrowserSupportCore;
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3110,10 +3195,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var ExecutionEnvironment = __webpack_require__(35);
+	var ExecutionEnvironment = __webpack_require__(37);
 
-	var camelize = __webpack_require__(50);
-	var invariant = __webpack_require__(51);
+	var camelize = __webpack_require__(52);
+	var invariant = __webpack_require__(53);
 
 	var memoized = {};
 	var prefixes = ['Webkit', 'ms', 'Moz', 'O'];
@@ -3150,7 +3235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getVendorPrefixedName;
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports) {
 
 	/**
@@ -3187,7 +3272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = camelize;
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3241,7 +3326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = invariant;
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3258,14 +3343,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var React = __webpack_require__(27);
-	var FixedDataTableRowBuffer = __webpack_require__(53);
-	var FixedDataTableRow = __webpack_require__(57);
+	var React = __webpack_require__(29);
+	var FixedDataTableRowBuffer = __webpack_require__(55);
+	var FixedDataTableRow = __webpack_require__(59);
 
-	var cx = __webpack_require__(46);
-	var emptyFunction = __webpack_require__(31);
-	var joinClasses = __webpack_require__(65);
-	var translateDOMPositionXY = __webpack_require__(47);
+	var cx = __webpack_require__(48);
+	var emptyFunction = __webpack_require__(33);
+	var joinClasses = __webpack_require__(67);
+	var translateDOMPositionXY = __webpack_require__(49);
 
 	var PropTypes = React.PropTypes;
 
@@ -3401,7 +3486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableBufferedRows;
 
 /***/ },
-/* 53 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3422,10 +3507,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var IntegerBufferSet = __webpack_require__(54);
+	var IntegerBufferSet = __webpack_require__(56);
 
-	var clamp = __webpack_require__(56);
-	var invariant = __webpack_require__(51);
+	var clamp = __webpack_require__(58);
+	var invariant = __webpack_require__(53);
 	var MIN_BUFFER_ROWS = 3;
 	var MAX_BUFFER_ROWS = 6;
 
@@ -3529,7 +3614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableRowBuffer;
 
 /***/ },
-/* 54 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3550,9 +3635,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var Heap = __webpack_require__(55);
+	var Heap = __webpack_require__(57);
 
-	var invariant = __webpack_require__(51);
+	var invariant = __webpack_require__(53);
 
 	// Data structure that allows to store values and assign positions to them
 	// in a way to minimize changing positions of stored values when new ones are
@@ -3714,7 +3799,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = IntegerBufferSet;
 
 /***/ },
-/* 55 */
+/* 57 */
 /***/ function(module, exports) {
 
 	/**
@@ -3898,7 +3983,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Heap;
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports) {
 
 	/**
@@ -3935,7 +4020,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = clamp;
 
 /***/ },
-/* 57 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3954,12 +4039,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var React = __webpack_require__(27);
-	var FixedDataTableCellGroup = __webpack_require__(58);
+	var React = __webpack_require__(29);
+	var FixedDataTableCellGroup = __webpack_require__(60);
 
-	var cx = __webpack_require__(46);
-	var joinClasses = __webpack_require__(65);
-	var translateDOMPositionXY = __webpack_require__(47);
+	var cx = __webpack_require__(48);
+	var joinClasses = __webpack_require__(67);
+	var translateDOMPositionXY = __webpack_require__(49);
 
 	var PropTypes = React.PropTypes;
 
@@ -4026,7 +4111,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param number|string columnKey
 	     * @param object event
 	     */
-	    onColumnResize: PropTypes.func
+	    onColumnResize: PropTypes.func,
+
+	    isColumnReordering: PropTypes.bool,
+	    /**
+	     * Callback for when reorder handle (in FixedDataTableCell) is clicked
+	     * to initialize reordering. Please note this is only on the cells
+	     * in the header.
+	     * @param number|string columnKey
+	     * @param number cellWidth
+	     * @param number leftOffset
+	     * @param object event
+	     */
+	    onColumnReorder: PropTypes.func,
+
+	    /**
+	     * Callback for when a cell is moved while reordering.
+	     * @param number distance
+	     */
+	    onColumnReorderMove: PropTypes.func,
+
+	    /**
+	     * Callback for when the mouse is released to complete reordering.
+	     * @param number distance
+	     */
+	    onColumnReorderEnd: PropTypes.func
 	  },
 
 	  render: function render() /*object*/{
@@ -4042,7 +4151,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      'public/fixedDataTableRow/odd': this.props.index % 2 === 1,
 	      'public/fixedDataTableRow/even': this.props.index % 2 === 0
 	    });
-
 	    var fixedColumnsWidth = this._getColumnsWidth(this.props.fixedColumns);
 	    var fixedColumns = React.createElement(FixedDataTableCellGroup, {
 	      key: 'fixed_cells',
@@ -4053,6 +4161,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      zIndex: 2,
 	      columns: this.props.fixedColumns,
 	      onColumnResize: this.props.onColumnResize,
+	      onColumnReorder: this.props.onColumnReorder,
+	      onColumnReorderMove: this.props.onColumnReorderMove,
+	      onColumnReorderEnd: this.props.onColumnReorderEnd,
+	      isColumnReordering: this.props.isColumnReordering,
+	      columnReorderingData: this.props.columnReorderingData,
 	      rowHeight: this.props.height,
 	      rowIndex: this.props.index
 	    });
@@ -4067,6 +4180,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      zIndex: 0,
 	      columns: this.props.scrollableColumns,
 	      onColumnResize: this.props.onColumnResize,
+	      onColumnReorder: this.props.onColumnReorder,
+	      onColumnReorderMove: this.props.onColumnReorderMove,
+	      onColumnReorderEnd: this.props.onColumnReorderEnd,
+	      isColumnReordering: this.props.isColumnReordering,
+	      columnReorderingData: this.props.columnReorderingData,
 	      rowHeight: this.props.height,
 	      rowIndex: this.props.index
 	    });
@@ -4189,7 +4307,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableRow;
 
 /***/ },
-/* 58 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4210,12 +4328,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var FixedDataTableHelper = __webpack_require__(59);
-	var React = __webpack_require__(27);
-	var FixedDataTableCell = __webpack_require__(63);
+	var FixedDataTableHelper = __webpack_require__(61);
+	var React = __webpack_require__(29);
+	var FixedDataTableCell = __webpack_require__(65);
 
-	var cx = __webpack_require__(46);
-	var translateDOMPositionXY = __webpack_require__(47);
+	var cx = __webpack_require__(48);
+	var translateDOMPositionXY = __webpack_require__(49);
 
 	var PropTypes = React.PropTypes;
 
@@ -4242,6 +4360,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    onColumnResize: PropTypes.func,
 
+	    onColumnReorder: PropTypes.func,
+	    onColumnReorderMove: PropTypes.func,
+	    onColumnReorderEnd: PropTypes.func,
+
 	    rowHeight: PropTypes.number.isRequired,
 
 	    rowIndex: PropTypes.number.isRequired,
@@ -4256,18 +4378,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var columns = props.columns;
 	    var cells = new Array(columns.length);
 
+	    var contentWidth = this._getColumnsWidth(columns);
+
+	    var isColumnReordering = props.isColumnReordering && columns.reduce(function (acc, column) {
+	      return acc || props.columnReorderingData.columnKey === column.props.columnKey;
+	    }, false);
+
 	    var currentPosition = 0;
 	    for (var i = 0, j = columns.length; i < j; i++) {
 	      var columnProps = columns[i].props;
 	      if (!columnProps.allowCellsRecycling || currentPosition - props.left <= props.width && currentPosition - props.left + columnProps.width >= 0) {
 	        var key = 'cell_' + i;
-	        cells[i] = this._renderCell(props.rowIndex, props.rowHeight, columnProps, currentPosition, key);
+	        cells[i] = this._renderCell(props.rowIndex, props.rowHeight, columnProps, currentPosition, key, contentWidth, isColumnReordering);
 	      }
 	      currentPosition += columnProps.width;
 	    }
-
-	    var contentWidth = this._getColumnsWidth(columns);
-
 	    var style = {
 	      height: props.height,
 	      position: 'absolute',
@@ -4290,13 +4415,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /*number*/height,
 	  /*object*/columnProps,
 	  /*number*/left,
-	  /*string*/key) /*object*/{
+	  /*string*/key,
+	  /*number*/columnGroupWidth,
+	  /*boolean*/isColumnReordering) /*object*/{
 
 	    var cellIsResizable = columnProps.isResizable && this.props.onColumnResize;
 	    var onColumnResize = cellIsResizable ? this.props.onColumnResize : null;
 
-	    var className = columnProps.cellClassName;
+	    var cellIsReorderable = this.props.onColumnReorder && rowIndex === -1 && columnGroupWidth !== columnProps.width;
+	    var onColumnReorder = cellIsReorderable ? this.props.onColumnReorder : null;
 
+	    var className = columnProps.cellClassName;
 	    return React.createElement(FixedDataTableCell, {
 	      isScrolling: this.props.isScrolling,
 	      align: columnProps.align,
@@ -4306,11 +4435,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      maxWidth: columnProps.maxWidth,
 	      minWidth: columnProps.minWidth,
 	      onColumnResize: onColumnResize,
+	      onColumnReorder: onColumnReorder,
+	      onColumnReorderMove: this.props.onColumnReorderMove,
+	      onColumnReorderEnd: this.props.onColumnReorderEnd,
+	      isColumnReordering: isColumnReordering,
+	      columnReorderingData: this.props.columnReorderingData,
 	      rowIndex: rowIndex,
 	      columnKey: columnProps.columnKey,
 	      width: columnProps.width,
 	      left: left,
-	      cell: columnProps.cell
+	      cell: columnProps.cell,
+	      columnGroupWidth: columnGroupWidth
 	    });
 	  },
 
@@ -4401,7 +4536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableCellGroup;
 
 /***/ },
-/* 59 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4418,10 +4553,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Locale = __webpack_require__(60);
-	var React = __webpack_require__(27);
-	var FixedDataTableColumnGroup = __webpack_require__(61);
-	var FixedDataTableColumn = __webpack_require__(62);
+	var Locale = __webpack_require__(62);
+	var React = __webpack_require__(29);
+	var FixedDataTableColumnGroup = __webpack_require__(63);
+	var FixedDataTableColumn = __webpack_require__(64);
 
 	var DIR_SIGN = Locale.isRTL() ? -1 : +1;
 	// A cell up to 5px outside of the visible area will still be considered visible
@@ -4510,7 +4645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableHelper;
 
 /***/ },
-/* 60 */
+/* 62 */
 /***/ function(module, exports) {
 
 	/**
@@ -4539,7 +4674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Locale;
 
 /***/ },
-/* 61 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4556,7 +4691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var React = __webpack_require__(27);
+	var React = __webpack_require__(29);
 
 	var PropTypes = React.PropTypes;
 
@@ -4621,7 +4756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableColumnGroup;
 
 /***/ },
-/* 62 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4638,7 +4773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var React = __webpack_require__(27);
+	var React = __webpack_require__(29);
 
 	var PropTypes = React.PropTypes;
 
@@ -4805,7 +4940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableColumn;
 
 /***/ },
-/* 63 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4822,13 +4957,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var FixedDataTableCellDefault = __webpack_require__(64);
-	var FixedDataTableHelper = __webpack_require__(59);
-	var React = __webpack_require__(27);
-	var cx = __webpack_require__(46);
-	var joinClasses = __webpack_require__(65);
+	var FixedDataTableCellDefault = __webpack_require__(66);
+	var FixedDataTableColumnReorderHandle = __webpack_require__(68);
+	var FixedDataTableHelper = __webpack_require__(61);
+	var React = __webpack_require__(29);
+	var cx = __webpack_require__(48);
+	var joinClasses = __webpack_require__(67);
 
 	var DIR_SIGN = FixedDataTableHelper.DIR_SIGN;
 
@@ -4879,6 +5017,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param object event
 	     */
 	    onColumnResize: PropTypes.func,
+	    onColumnReorder: PropTypes.func,
 
 	    /**
 	     * The left offset in pixels of the cell.
@@ -4886,8 +5025,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	    left: PropTypes.number
 	  },
 
+	  getInitialState: function getInitialState() {
+	    return {
+	      isReorderingThisColumn: false,
+	      displacement: 0,
+	      reorderingDisplacement: 0
+	    };
+	  },
+
 	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
 	    return !nextProps.isScrolling || this.props.rowIndex !== nextProps.rowIndex;
+	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps(props) {
+	    var left = props.left + this.state.displacement;
+
+	    var newState = {
+	      isReorderingThisColumn: false
+	    };
+
+	    if (props.isColumnReordering) {
+	      var originalLeft = props.columnReorderingData.originalLeft;
+	      var reorderCellLeft = originalLeft + props.columnReorderingData.dragDistance;
+	      var farthestPossiblePoint = props.columnGroupWidth - props.columnReorderingData.columnWidth;
+
+	      // ensure the cell isn't being dragged out of the column group
+	      reorderCellLeft = Math.max(reorderCellLeft, 0);
+	      reorderCellLeft = Math.min(reorderCellLeft, farthestPossiblePoint);
+
+	      if (props.columnKey === props.columnReorderingData.columnKey) {
+	        newState.displacement = reorderCellLeft - props.left;
+	        newState.isReorderingThisColumn = true;
+	      } else {
+	        var reorderCellRight = reorderCellLeft + props.columnReorderingData.columnWidth;
+	        var reorderCellCenter = reorderCellLeft + props.columnReorderingData.columnWidth / 2;
+	        var centerOfThisColumn = left + props.width / 2;
+
+	        var cellIsBeforeOneBeingDragged = reorderCellCenter > centerOfThisColumn;
+	        var cellWasOriginallyBeforeOneBeingDragged = originalLeft > props.left;
+	        var changedPosition = false;
+
+	        var dragPoint, thisCellPoint;
+	        if (cellIsBeforeOneBeingDragged) {
+	          if (reorderCellLeft < centerOfThisColumn) {
+	            changedPosition = true;
+	            if (cellWasOriginallyBeforeOneBeingDragged) {
+	              newState.displacement = props.columnReorderingData.columnWidth;
+	            } else {
+	              newState.displacement = 0;
+	            }
+	          }
+	        } else {
+	          if (reorderCellRight > centerOfThisColumn) {
+	            changedPosition = true;
+	            if (cellWasOriginallyBeforeOneBeingDragged) {
+	              newState.displacement = 0;
+	            } else {
+	              newState.displacement = props.columnReorderingData.columnWidth * -1;
+	            }
+	          }
+	        }
+
+	        if (changedPosition) {
+	          if (cellIsBeforeOneBeingDragged) {
+	            if (!props.columnReorderingData.columnAfter) {
+	              props.columnReorderingData.columnAfter = props.columnKey;
+	            }
+	          } else {
+	            props.columnReorderingData.columnBefore = props.columnKey;
+	          }
+	        } else if (cellIsBeforeOneBeingDragged) {
+	          props.columnReorderingData.columnBefore = props.columnKey;
+	        } else if (!props.columnReorderingData.columnAfter) {
+	          props.columnReorderingData.columnAfter = props.columnKey;
+	        }
+	      }
+	    } else {
+	      newState.displacement = 0;
+	    }
+
+	    this.setState(newState);
 	  },
 
 	  getDefaultProps: function getDefaultProps() /*object*/{
@@ -4908,9 +5125,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    if (DIR_SIGN === 1) {
-	      style.left = props.left;
+	      style.left = props.left + this.state.displacement;
 	    } else {
-	      style.right = props.left;
+	      style.right = props.left + this.state.displacement;
+	    }
+
+	    if (this.state.isReorderingThisColumn) {
+	      style.zIndex = 1;
 	    }
 
 	    var className = joinClasses(cx({
@@ -4920,7 +5141,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      'fixedDataTableCellLayout/alignCenter': props.align === 'center',
 	      'public/fixedDataTableCell/alignRight': props.align === 'right',
 	      'public/fixedDataTableCell/highlighted': props.highlighted,
-	      'public/fixedDataTableCell/main': true
+	      'public/fixedDataTableCell/main': true,
+	      'public/fixedDataTableCell/hasReorderHandle': !!props.onColumnReorder,
+	      'public/fixedDataTableCell/reordering': this.state.isReorderingThisColumn
 	    }), props.className);
 
 	    var columnResizerComponent;
@@ -4939,6 +5162,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          style: columnResizerStyle
 	        })
 	      );
+	    }
+
+	    var columnReorderComponent;
+	    if (props.onColumnReorder) {
+	      //header row
+	      columnReorderComponent = React.createElement(FixedDataTableColumnReorderHandle, _extends({
+	        columnKey: this.columnKey,
+	        onMouseDown: this._onColumnReorderMouseDown,
+	        height: height
+	      }, this.props));
 	    }
 
 	    var cellProps = {
@@ -4968,19 +5201,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      'div',
 	      { className: className, style: style },
 	      columnResizerComponent,
+	      columnReorderComponent,
 	      content
 	    );
 	  },
 
 	  _onColumnResizerMouseDown: function _onColumnResizerMouseDown( /*object*/event) {
 	    this.props.onColumnResize(this.props.left, this.props.width, this.props.minWidth, this.props.maxWidth, this.props.columnKey, event);
+	  },
+
+	  _onColumnReorderMouseDown: function _onColumnReorderMouseDown( /*object*/event) {
+	    this.props.onColumnReorder(this.props.columnKey, this.props.width, this.props.left, event);
 	  }
 	});
 
 	module.exports = FixedDataTableCell;
 
 /***/ },
-/* 64 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5001,10 +5239,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var React = __webpack_require__(27);
+	var React = __webpack_require__(29);
 
-	var cx = __webpack_require__(46);
-	var joinClasses = __webpack_require__(65);
+	var cx = __webpack_require__(48);
+	var joinClasses = __webpack_require__(67);
 
 	var PropTypes = React.PropTypes;
 
@@ -5095,7 +5333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableCellDefault;
 
 /***/ },
-/* 65 */
+/* 67 */
 /***/ function(module, exports) {
 
 	/**
@@ -5139,7 +5377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = joinClasses;
 
 /***/ },
-/* 66 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5160,13 +5398,129 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var DOMMouseMoveTracker = __webpack_require__(39);
-	var Locale = __webpack_require__(60);
-	var React = __webpack_require__(27);
-	var ReactComponentWithPureRenderMixin = __webpack_require__(29);
+	var DOMMouseMoveTracker = __webpack_require__(41);
+	var Locale = __webpack_require__(62);
+	var React = __webpack_require__(29);
+	var ReactComponentWithPureRenderMixin = __webpack_require__(31);
 
-	var clamp = __webpack_require__(56);
-	var cx = __webpack_require__(46);
+	var clamp = __webpack_require__(58);
+	var cx = __webpack_require__(48);
+
+	var PropTypes = React.PropTypes;
+
+	var FixedDataTableColumnReorderHandle = React.createClass({
+	  displayName: 'FixedDataTableColumnReorderHandle',
+
+	  mixins: [ReactComponentWithPureRenderMixin],
+
+	  propTypes: {
+
+	    /**
+	     * When resizing is complete this is called.
+	     */
+	    onColumnReorderEnd: PropTypes.func,
+
+	    /**
+	     * Column key for the column being resized.
+	     */
+	    columnKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+	  },
+
+	  getInitialState: function getInitialState() /*object*/{
+	    return {
+	      dragDistance: 0
+	    };
+	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps( /*object*/newProps) {},
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (this._mouseMoveTracker) {
+	      this._mouseMoveTracker.releaseMouseMoves();
+	      this._mouseMoveTracker = null;
+	    }
+	  },
+
+	  render: function render() /*object*/{
+	    var style = {
+	      height: this.props.height
+	    };
+	    return React.createElement('div', {
+	      className: cx({
+	        'fixedDataTableCellLayout/columnReorderContainer': true,
+	        'fixedDataTableCellLayout/columnReorderContainer/active': false
+	      }),
+	      onMouseDown: this.onMouseDown,
+	      style: style });
+	  },
+
+	  onMouseDown: function onMouseDown(event) {
+	    var targetRect = event.target.getBoundingClientRect();
+
+	    var mouseLocationInElement = event.clientX - targetRect.offsetLeft;
+	    var mouseLocationInRelationToColumnGroup = mouseLocationInElement + event.target.parentElement.offsetLeft;
+
+	    this._mouseMoveTracker = new DOMMouseMoveTracker(this._onMove, this._onColumnReorderEnd, document.body);
+	    this._mouseMoveTracker.captureMouseMoves(event);
+	    this.setState({
+	      dragDistance: 0
+	    });
+	    this.props.onMouseDown({
+	      columnKey: this.props.columnKey,
+	      mouseLocation: {
+	        dragDistance: 0,
+	        inElement: mouseLocationInElement,
+	        inColumnGroup: mouseLocationInRelationToColumnGroup
+	      }
+	    });
+	  },
+
+	  _onMove: function _onMove( /*number*/deltaX) {
+	    var distance = this.state.dragDistance + deltaX;
+	    this.setState({
+	      dragDistance: distance
+	    });
+	    this.props.onColumnReorderMove(distance);
+	  },
+
+	  _onColumnReorderEnd: function _onColumnReorderEnd() {
+	    this._mouseMoveTracker.releaseMouseMoves();
+
+	    this.props.onColumnReorderEnd();
+	  }
+	});
+
+	module.exports = FixedDataTableColumnReorderHandle;
+
+/***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * This is to be used with the FixedDataTable. It is a read line
+	 * that when you click on a column that is resizable appears and allows
+	 * you to resize the corresponding column.
+	 *
+	 * @providesModule FixedDataTableColumnResizeHandle.react
+	 * @typechecks
+	 */
+
+	'use strict';
+
+	var DOMMouseMoveTracker = __webpack_require__(41);
+	var Locale = __webpack_require__(62);
+	var React = __webpack_require__(29);
+	var ReactComponentWithPureRenderMixin = __webpack_require__(31);
+
+	var clamp = __webpack_require__(58);
+	var cx = __webpack_require__(48);
 
 	var PropTypes = React.PropTypes;
 
@@ -5304,7 +5658,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableColumnResizeHandle;
 
 /***/ },
-/* 67 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5325,8 +5679,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var PrefixIntervalTree = __webpack_require__(68);
-	var clamp = __webpack_require__(56);
+	var PrefixIntervalTree = __webpack_require__(71);
+	var clamp = __webpack_require__(58);
 
 	var BUFFER_ROWS = 5;
 	var NO_ROWS_SCROLL_RESULT = {
@@ -5609,7 +5963,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableScrollHelper;
 
 /***/ },
-/* 68 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -5631,7 +5985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(51);
+	var invariant = __webpack_require__(53);
 
 	var parent = function parent(node) {
 	  return Math.floor(node / 2);
@@ -5873,7 +6227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 69 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5890,7 +6244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var React = __webpack_require__(27);
+	var React = __webpack_require__(29);
 
 	function getTotalWidth( /*array*/columns) /*number*/{
 	  var totalWidth = 0;
@@ -6011,7 +6365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = FixedDataTableWidthHelper;
 
 /***/ },
-/* 70 */
+/* 73 */
 /***/ function(module, exports) {
 
 	/**
@@ -6083,7 +6437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = debounce;
 
 /***/ },
-/* 71 */
+/* 74 */
 /***/ function(module, exports) {
 
 	/**
