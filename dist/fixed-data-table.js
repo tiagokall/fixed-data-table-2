@@ -1,7 +1,7 @@
 /**
- * FixedDataTable v0.6.0 
+ * FixedDataTable v0.6.1 
  *
- * Copyright (c) 2015, Facebook, Inc.
+ * Copyright Schrodinger, LLC
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -171,7 +171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -195,7 +195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Table: FixedDataTable
 	};
 
-	FixedDataTableRoot.version = '0.6.0';
+	FixedDataTableRoot.version = '0.6.1';
 	module.exports = FixedDataTableRoot;
 
 /***/ },
@@ -203,7 +203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -1273,7 +1273,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -1298,7 +1298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -1374,7 +1374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -1484,7 +1484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -1527,7 +1527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -1728,7 +1728,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright 2004-present Facebook. All Rights Reserved.
+	 * Copyright Schrodinger, LLC
 	 *
 	 * @providesModule UserAgent_DEPRECATED
 	 */
@@ -2011,7 +2011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright 2013-2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2076,7 +2076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2119,7 +2119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2160,7 +2160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2182,7 +2182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2634,7 +2634,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2798,7 +2798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2880,7 +2880,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2906,7 +2906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2948,7 +2948,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -2973,7 +2973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3018,7 +3018,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3077,7 +3077,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3131,7 +3131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3182,7 +3182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3239,7 +3239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3276,7 +3276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3330,7 +3330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3431,12 +3431,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var rowPositionGetter = props.rowPositionGetter;
 
 	    var rowsToRender = this.state.rowsToRender;
+
+	    //Sort the rows, we slice first to avoid changing original
+	    var sortedRowsToRender = rowsToRender.slice().sort(function (a, b) {
+	      return a - b;
+	    });
+	    var rowPositions = {};
+
+	    //Row position calculation requires that rows are calculated in order
+	    sortedRowsToRender.forEach(function (rowIndex) {
+	      rowPositions[rowIndex] = rowPositionGetter(rowIndex);
+	    });
+
 	    this._staticRowArray.length = rowsToRender.length;
 
 	    for (var i = 0; i < rowsToRender.length; ++i) {
 	      var rowIndex = rowsToRender[i];
 	      var currentRowHeight = this._getRowHeight(rowIndex);
-	      var rowOffsetTop = rowPositionGetter(rowIndex);
+	      var rowOffsetTop = rowPositions[rowIndex];
 
 	      var hasBottomBorder = rowIndex === props.rowsCount - 1 && props.showLastRowBorder;
 
@@ -3490,7 +3502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3618,7 +3630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3803,7 +3815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -3987,7 +3999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4024,7 +4036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4311,7 +4323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4540,7 +4552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4649,7 +4661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4678,7 +4690,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4760,7 +4772,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -4911,10 +4923,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Whether the column can be dragged to reorder.
-	     *
-	     * This property only provides the UI for the column reordering. If this
-	     * is set to true, you will need to set the onColumnReorderEndCallback table
-	     * property and render your columns appropriately.
 	     */
 	    isReorderable: PropTypes.bool,
 
@@ -4953,7 +4961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -5134,12 +5142,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    if (DIR_SIGN === 1) {
-	      style.left = props.left + this.state.displacement;
+	      style.left = props.left;
 	    } else {
-	      style.right = props.left + this.state.displacement;
+	      style.right = props.left;
 	    }
 
 	    if (this.state.isReorderingThisColumn) {
+	      style.transform = 'translateX(' + this.state.displacement + 'px) translateZ(0)';
 	      style.zIndex = 1;
 	    }
 
@@ -5231,7 +5240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -5346,7 +5355,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright 2013-2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -5390,18 +5399,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * This is to be used with the FixedDataTable. It is a read line
-	 * that when you click on a column that is resizable appears and allows
-	 * you to resize the corresponding column.
+	 * This is to be used with the FixedDataTable. It is a header icon
+	 * that allows you to reorder the corresponding column.
 	 *
-	 * @providesModule FixedDataTableColumnResizeHandle.react
+	 * @providesModule FixedDataTableColumnReorderHandle.react
 	 * @typechecks
 	 */
 
@@ -5430,7 +5438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onColumnReorderEnd: PropTypes.func,
 
 	    /**
-	     * Column key for the column being resized.
+	     * Column key for the column being reordered.
 	     */
 	    columnKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 	  },
@@ -5482,20 +5490,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        inColumnGroup: mouseLocationInRelationToColumnGroup
 	      }
 	    });
+
+	    this._distance = 0;
+	    this._animating = true;
+	    requestAnimationFrame(this._updateState);
 	  },
 
 	  _onMove: function _onMove( /*number*/deltaX) {
-	    var distance = this.state.dragDistance + deltaX;
-	    this.setState({
-	      dragDistance: distance
-	    });
-	    this.props.onColumnReorderMove(distance);
+	    this._distance = this.state.dragDistance + deltaX;
 	  },
 
 	  _onColumnReorderEnd: function _onColumnReorderEnd() {
+	    this._animating = false;
 	    this._mouseMoveTracker.releaseMouseMoves();
-
 	    this.props.onColumnReorderEnd();
+	  },
+
+	  _updateState: function _updateState() {
+	    if (this._animating) {
+	      requestAnimationFrame(this._updateState);
+	    }
+	    this.setState({
+	      dragDistance: this._distance
+	    });
+	    this.props.onColumnReorderMove(this._distance);
 	  }
 	});
 
@@ -5506,7 +5524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -5671,7 +5689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -5976,7 +5994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -6240,7 +6258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -6378,7 +6396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
@@ -6450,7 +6468,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/**
-	 * Copyright (c) 2015, Facebook, Inc.
+	 * Copyright Schrodinger, LLC
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
