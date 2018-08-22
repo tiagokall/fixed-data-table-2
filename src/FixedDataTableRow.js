@@ -51,6 +51,11 @@ class FixedDataTableRowImpl extends React.Component {
     scrollableColumns: PropTypes.array.isRequired,
 
     /**
+     * Number of max on screen columns
+     */
+    maxVisibleColumns: PropTypes.number.isRequired,
+
+    /**
      * The distance between the left edge of the table and the leftmost portion
      * of the row currently visible in the table.
      */
@@ -122,6 +127,7 @@ class FixedDataTableRowImpl extends React.Component {
       'public/fixedDataTableRow/even': (this.props.index % 2 === 0),
     });
     var fixedColumnsWidth = this._getColumnsWidth(this.props.fixedColumns);
+
     var fixedColumns =
       <FixedDataTableCellGroup
         key="fixed_cells"
@@ -131,6 +137,7 @@ class FixedDataTableRowImpl extends React.Component {
         width={fixedColumnsWidth}
         zIndex={2}
         columns={this.props.fixedColumns}
+        maxVisibleColumns={this.props.fixedColumns.length}
         onColumnResize={this.props.onColumnResize}
         onColumnReorder={this.props.onColumnReorder}
         onColumnReorderMove={this.props.onColumnReorderMove}
@@ -151,6 +158,7 @@ class FixedDataTableRowImpl extends React.Component {
         width={this.props.width - fixedColumnsWidth}
         zIndex={0}
         columns={this.props.scrollableColumns}
+        maxVisibleColumns={this.props.maxVisibleColumns}
         onColumnResize={this.props.onColumnResize}
         onColumnReorder={this.props.onColumnReorder}
         onColumnReorderMove={this.props.onColumnReorderMove}

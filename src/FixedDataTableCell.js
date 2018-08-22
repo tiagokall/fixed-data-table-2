@@ -13,6 +13,7 @@
 import FixedDataTableCellDefault from 'FixedDataTableCellDefault';
 import FixedDataTableColumnReorderHandle from './FixedDataTableColumnReorderHandle';
 import FixedDataTableHelper from 'FixedDataTableHelper';
+import FixedDataTableTranslateDOMPosition from 'FixedDataTableTranslateDOMPosition';
 import React from 'React';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
@@ -82,6 +83,11 @@ var FixedDataTableCell = createReactClass({
     left: PropTypes.number,
 
     /**
+     * Indicates if column should be rendered
+     */
+    visible: PropTypes.bool.isRequired,
+
+    /**
      * Flag for enhanced performance check
      */
     pureRendering: PropTypes.bool,
@@ -96,8 +102,14 @@ var FixedDataTableCell = createReactClass({
   },
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.isScrolling && this.props.rowIndex === nextProps.rowIndex) {
+    if (nextProps.isScrolling &&
+        this.props.rowIndex === nextProps.rowIndex && 
+        this.props.columnKey === nextProps.columnKey) {
       return false;
+    }
+    
+    if (!!(this.props.visible ^ nextProps.visible)) {
+      return true;
     }
 
     //Performance check not enabled
@@ -201,6 +213,9 @@ var FixedDataTableCell = createReactClass({
   },
 
   render() /*object*/ {
+    if (!this.props.visible) {
+      return null;
+    }
 
     var {height, width, columnKey, ...props} = this.props;
 
@@ -209,16 +224,12 @@ var FixedDataTableCell = createReactClass({
       width,
     };
 
-    if (DIR_SIGN === 1) {
-      style.left = props.left;
-    } else {
-      style.right = props.left;
-    }
-
     if (this.state.isReorderingThisColumn) {
       style.transform = `translateX(${this.state.displacement}px) translateZ(0)`;
       style.zIndex = 1;
     }
+
+    FixedDataTableTranslateDOMPosition(style, DIR_SIGN * props.left, 0, false);
 
     var className = joinClasses(
       cx({

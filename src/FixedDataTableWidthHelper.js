@@ -22,6 +22,45 @@ function getTotalWidth(/*array*/ columns) /*number*/ {
   return totalWidth;
 }
 
+function getMaxVisibleColumns(/*array*/ columns, /*number*/ width) /*number*/ {
+  var maxColumns = 0;
+  var currentWidth = 0;
+
+  //NOTE (asif) We use the filter loop to update the width
+  var scrollableColumns = columns.filter(function(column) {
+    var fixed = column.props.fixed;
+    if (fixed) {
+      width -= column.props.width;
+    }
+    return !fixed;
+  });
+
+  //Columns that we can't recycle
+  var nonRecyclable = 0;
+
+  var first = 0;
+  for (var i = 0; i < scrollableColumns.length; ++i) {
+    var columnProps = scrollableColumns[i].props;
+    var columnWidth = columnProps.width;
+    var recycable = columnProps.allowCellsRecycling;
+
+    if (recycable !== true) { 
+      nonRecyclable++;
+    }
+
+    var firstColumnWidth = scrollableColumns[first].props.width;
+    //Subtract firstColumnWidth because its always on screen
+    while (currentWidth - firstColumnWidth - 1 > width) {
+      currentWidth -= scrollableColumns[first++].props.width;
+    }
+    currentWidth += columnWidth;
+    maxColumns = Math.max(maxColumns, i - first + 1);
+  }
+
+  //Max columns that will fit on screen
+  return maxColumns + nonRecyclable;
+}
+
 function getTotalFlexGrow(/*array*/ columns) /*number*/ {
   var totalFlexGrow = 0;
   for (var i = 0; i < columns.length; ++i) {
@@ -146,6 +185,7 @@ function adjustColumnWidths(
 
 var FixedDataTableWidthHelper = {
   getTotalWidth,
+  getMaxVisibleColumns,
   getTotalFlexGrow,
   distributeFlexWidth,
   adjustColumnWidths,
